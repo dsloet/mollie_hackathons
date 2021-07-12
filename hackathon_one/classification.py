@@ -74,4 +74,4 @@ def train_and_metrics_pipeline(df, X, y):
     metrics = calc_metrics(model, X_test_scaled, y_test)
     print(metrics)
     # End of your code
-    return metrics
+    return model, metrics

@@ -5,6 +5,8 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 import pandas as pd
 
+import pickle
+
 
 from classification import train_and_metrics_pipeline
 
@@ -24,4 +26,8 @@ print(df.head())
 X = df.drop("diagnosis_int", 1)
 y = df["diagnosis_int"]
 
-train_and_metrics_pipeline(df, X, y)
+model, metrics = train_and_metrics_pipeline(df, X, y)
+
+# save the model to disk
+filename = "saved_model.pickle"
+pickle.dump(model, open(filename, "wb"))
