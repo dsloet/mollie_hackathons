@@ -39,7 +39,7 @@ def select_k_best_features(df, X, y) -> list:
     selector = SelectKBest(f_classif, k=20)
 
     # Fit to scaled data, then transform it
-    X_new = selector.fit_transform(X_train_scaled, y_train)
+    selector.fit_transform(X_train_scaled, y_train)
 
     # Print the results
     feature_idx = selector.get_support()
@@ -50,28 +50,3 @@ def select_k_best_features(df, X, y) -> list:
     feature_names = df.drop(columns=["diagnosis_int"]).columns[feature_idx]
 
     return feature_names
-
-
-# Define a function that selects best features using the function
-# above > trains a model > returns the model performance metrics.
-def train_and_metrics_pipeline(df, X, y):
-    # write your code here
-
-    relevant_feats = select_k_best_features(df, X, y)
-    df = df[relevant_feats].copy()
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=RANDOM_SEED
-    )
-
-    scaler = StandardScaler().fit(X_train)
-    X_train_scaled = scaler.transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
-    model = RandomForestClassifier(criterion="entropy", random_state=RANDOM_SEED)
-    model.fit(X_train_scaled, y_train)
-
-    metrics = calc_metrics(model, X_test_scaled, y_test)
-    print(metrics)
-    # End of your code
-    return model, metrics

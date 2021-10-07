@@ -1,0 +1,6 @@
+matplotlib
+jupyter
+pandas
+sklearn
+fastapi
+pickle
