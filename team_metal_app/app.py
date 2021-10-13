@@ -16,13 +16,28 @@ async def root():
     return {"message": "Hello World"}
 
 
-class Item(BaseModel):
-    name: str
-    description: Optional[str] = None
-    price: float
-    tax: Optional[float] = None
-
+class Payload(BaseModel):
+    radius_mean: float
+    texture_mean: float
+    perimeter_mean: float
+    area_mean: float
+    compactness_mean: float
+    concavity_mean: float
+    concave_points_mean: float
+    radius_se: float
+    perimeter_se: float
+    area_se: float
+    concave_points_se: float
+    radius_worst: float
+    texture_worst: float
+    perimeter_worst: float
+    area_worst: float
+    smoothness_worst: float
+    compactness_worst: float
+    concavity_worst: float
+    concave_points_worst: float
+    symmetry_worst: float
 
 @app.post("/predict")
-async def predict():
+async def predict(payload: Payload):
     return {"message": "Go away"}
