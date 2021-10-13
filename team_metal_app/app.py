@@ -1,13 +1,14 @@
 import pickle
-from typing import Optional
 
+import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel
+from sklearn.ensemble import RandomForestClassifier
 
 app = FastAPI()
 
 infile = open("./model", "rb")
-model = pickle.load(infile)
+model: RandomForestClassifier = pickle.load(infile)
 infile.close()
 
 
@@ -38,6 +39,15 @@ class Payload(BaseModel):
     concave_points_worst: float
     symmetry_worst: float
 
+
 @app.post("/predict")
 async def predict(payload: Payload):
-    return {"message": "Go away"}
+
+    d = payload.dict()
+    vector = np.asarray((list(d.values())), dtype=np.float32).reshape(-1, 20)
+
+    result = model.predict(vector)
+
+    result_msg = "benign" if result == 0 else "malignant"
+
+    return {"message": result_msg}
